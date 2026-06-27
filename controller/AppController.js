@@ -56,4 +56,17 @@ export const redirectUrl = async (req, res) => {
 };
 
 // get url analytics
-export const getUrlAnalytics = async (req, res) => {};
+export const getUrlAnalytics = async (req, res) => {
+  const { code } = req.params;
+
+  const url = await Url.findOne({ shortCode: code });
+  if (!url) {
+    throw NotFoundError("Url Not found");
+  }
+
+  res.status(STATUS_CODE.SUCCESS).json({
+    OriginalUrl: url.originalUrl,
+    ClickCount: url.clickCount,
+    CreatedAt: url.createdAt,
+  });
+};
